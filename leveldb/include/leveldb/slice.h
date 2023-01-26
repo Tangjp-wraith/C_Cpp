@@ -72,6 +72,7 @@ class LEVELDB_EXPORT Slice {
   }
 
   // Return a string that contains the copy of the referenced data.
+  // 转化成C++字符串
   std::string ToString() const { return std::string(data_, size_); }
 
   // Three-way comparison.  Returns value:
