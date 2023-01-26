@@ -26,19 +26,20 @@ namespace leveldb {
 
 class LEVELDB_EXPORT Slice {
  public:
-  // Create an empty slice.
+  /**
+   * 4种构造函数
+   * 空的字符串
+   * 字符串指针和字符串长度初始化一个Slice
+   * C++字符串初始化Slice
+   * 字符串指针初始化Slice
+   */
   Slice() : data_(""), size_(0) {}
-
-  // Create a slice that refers to d[0,n-1].
   Slice(const char* d, size_t n) : data_(d), size_(n) {}
-
-  // Create a slice that refers to the contents of "s"
   Slice(const std::string& s) : data_(s.data()), size_(s.size()) {}
-
-  // Create a slice that refers to s[0,strlen(s)-1]
   Slice(const char* s) : data_(s), size_(strlen(s)) {}
 
   // Intentionally copyable.
+  // 对于内部的拷贝构造和拷贝赋值，采用编译器默认提供的C++ =default 实现
   Slice(const Slice&) = default;
   Slice& operator=(const Slice&) = default;
 
@@ -65,6 +66,7 @@ class LEVELDB_EXPORT Slice {
   }
 
   // Drop the first "n" bytes from this slice.
+  // 对当前切片进行修改 删除前n个字符
   void remove_prefix(size_t n) {
     assert(n <= size());
     data_ += n;
@@ -81,6 +83,7 @@ class LEVELDB_EXPORT Slice {
   int compare(const Slice& b) const;
 
   // Return true iff "x" is a prefix of "*this"
+  // 判断当前切片指针指向的存储区和另一个切片存储区的前n个字节是否一致 
   bool starts_with(const Slice& x) const {
     return ((size_ >= x.size_) && (memcmp(data_, x.data_, x.size_) == 0));
   }
