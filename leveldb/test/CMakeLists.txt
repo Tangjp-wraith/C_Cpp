@@ -7,6 +7,6 @@ set(BASE_LIBS /home/tang/CSProjects/C_Cpp/leveldb/build/)
 include_directories(${BASE_INCLUDES})
 
 link_directories(${BASE_LIBS})
-add_executable(hw helloworld.cpp)
+add_executable(hw TestSlice.cpp)
 target_link_libraries(hw leveldb)
 
