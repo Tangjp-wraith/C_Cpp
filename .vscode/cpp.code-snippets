@@ -4,8 +4,6 @@
 		"body": [
 			"#include <iostream> ",
 			"",
-			"using namespace std;", //空行
-			"",
 			"",
 		],
 		"description": "A cpp file template." //用户输入后智能提示的内容（你可以用中文写“生成C++模板”）
