@@ -28,7 +28,7 @@ void critical_section(int change_v) noexcept {
 }
 
 struct X {
-  mutable std::mutex mtx;  //互斥量的生存期至少大于管理类
+  mutable std::mutex mtx;  //为什么static 互斥量的生存期至少大于管理类
   // 在类中，可能多个函数都依赖这一个互斥量，每个函数都有管理类
   void f() const {
     // mtx.lock(); 可写可不写
