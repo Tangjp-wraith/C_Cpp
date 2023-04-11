@@ -22,3 +22,9 @@ int Depth(BiTree T);
 
 //算法5.6 统计二叉树中的节点
 int NodeCount(BiTree T);
+
+//统计叶节点（度为0）的个数
+int LeafNode(BiTree T);
+
+//后序遍历的非递归算法
+void PostOrder(BiTree T);

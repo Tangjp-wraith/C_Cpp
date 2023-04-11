@@ -35,6 +35,30 @@ void InOrderTraverse1(BiTree T) {
   }
 }
 
+//后序遍历的非递归算法
+void PostOrder(BiTree T) {
+  BiTree p = T;
+  stack<BiTree> S;
+  BiTree q = new BiTNode;
+  while (p || !S.empty()) {
+    if (p) {
+      S.push(p);
+      p = p->lchild;
+    } else {
+      p = S.top();
+      if (p->rchild && p->rchild != q) {
+        p = p->rchild;
+      } else {
+        p = S.top();
+        S.pop();
+        cout << p->data << " ";
+        q = p;
+        p = NULL;
+      }
+    }
+  }
+}
+
 //算法5.3 先序遍历的顺序建立二叉链表
 void CreateBiTree(BiTree &T) {
   //按先序次序输入二叉树中结点的值（一个字符），创建二叉链表表示的二叉树T
@@ -76,14 +100,32 @@ int Depth(BiTree T) {
 
 //算法5.6 统计二叉树中的节点
 int NodeCount(BiTree T) {
-  
+  if (T == NULL) {
+    return 0;
+  }
+  return NodeCount(T->lchild) + NodeCount(T->rchild) + 1;
+}
+
+//统计叶节点（度为0）的个数
+int LeafNode(BiTree T) {
+  int count = 0;
+  if (T == NULL) {
+    return 0;
+  } else if (T->lchild == NULL && T->rchild == NULL) {
+    return count + 1;
+  } else {
+    count = LeafNode(T->lchild) + LeafNode(T->rchild);
+    return count;
+  }
 }
 
 int main() {
   BiTree tree;  // ABC##DE#G##F###
   CreateBiTree(tree);
   // InOrderTraverse(tree);
-  InOrderTraverse1(tree);
+  // InOrderTraverse1(tree);
+
+  PostOrder(tree);
   cout << endl;
 
   BiTree New;
@@ -91,5 +133,7 @@ int main() {
   InOrderTraverse(New);
   cout << endl;
 
-  cout << Depth(tree) << endl;
+  cout << Depth(tree) << " " << NodeCount(tree) << endl;
+
+  cout << LeafNode(tree) << " " << endl;
 }
