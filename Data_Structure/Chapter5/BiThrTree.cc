@@ -72,10 +72,10 @@ void InOrderTraverse_Thr(BiThrTree T) {
     while (!p->LTag) {
       p = p->lchild;  //沿左孩子向下,访问其左子树为空的结点
     }
-    cout << p->data<<" ";  
+    cout << p->data << " ";
     while (p->RTag && p->rchild != T) {
       p = p->rchild;  //沿右线索访问后继结点
-      cout << p->data<<" ";
+      cout << p->data << " ";
     }
     p = p->rchild;
   }
@@ -84,9 +84,9 @@ void InOrderTraverse_Thr(BiThrTree T) {
 int main() {
   pre->RTag = 1;
   pre->rchild = NULL;
-  BiThrTree tree,thrt;
+  BiThrTree tree, thrt;
   CreateBiTree(tree);
   InOrderThreading(thrt, tree);
   InOrderTraverse_Thr(thrt);
-  cout<<endl;
+  cout << endl;
 }

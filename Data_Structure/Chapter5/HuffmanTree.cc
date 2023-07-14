@@ -51,4 +51,3 @@ void CreatHuffmanTree(HuffmanTree &HT, int n) {
     HT[i].weight = HT[s1].weight + HT[s2].weight;  // i 的权值为左右孩子权值之和
   }
 }
-
