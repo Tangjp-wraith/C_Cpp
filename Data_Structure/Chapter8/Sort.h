@@ -12,6 +12,9 @@ typedef struct {
   int length;   //顺序表长度
 } SqList;
 
+void Create_Sq(SqList &L);
+void Show_Sq(SqList L);
+
 //算法8.1 直接插入排序
 void InsertSort(SqList &L);
 
@@ -19,3 +22,23 @@ void InsertSort(SqList &L);
 void BInsertSort(SqList &L);
 
 //算法8.3 希尔排序
+void ShellInsert(SqList &L, int dk);
+void ShellSort(SqList &L, int dt[], int t);
+
+//算法8.4 冒泡排序
+void BubbleSort(SqList &L);
+
+//算法8.5 快速排序
+int Partition(SqList &L, int low, int high);
+void QSort(SqList &L, int low, int high);
+void QuickSort(SqList &L);
+
+//算法8.6 简单选择排序
+void SelectSort(SqList &L);
+
+//算法8.7 筛选法调整堆
+void HeapAdjust(SqList &L, int s, int m);
+//算法8.8 建初堆
+void CreatHeap(SqList &L);
+//算法8.9 堆排序
+void HeapSort(SqList &L);
