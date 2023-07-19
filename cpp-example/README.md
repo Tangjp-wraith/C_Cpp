@@ -26,7 +26,3 @@
 - [异步packaged_task](https://github.com/Tangjp-wraith/C_Cpp/blob/master/cpp-example/concurrency/n.cc)
 - [异步promise](https://github.com/Tangjp-wraith/C_Cpp/blob/master/cpp-example/concurrency/o.cc)
 - [原子atomic](https://github.com/Tangjp-wraith/C_Cpp/blob/master/cpp-example/concurrency/p.cc)
-
-## 实现mystl时学习的一些C++知识
-
-**C++中的placement new机制**

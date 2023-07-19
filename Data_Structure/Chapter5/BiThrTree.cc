@@ -8,6 +8,7 @@ using namespace std;
 //全局变量pre
 BiThrNode *pre = new BiThrNode;
 
+// 先序遍历建二叉链表
 void CreateBiTree(BiThrTree &T) {
   char ch;
   cin >> ch;

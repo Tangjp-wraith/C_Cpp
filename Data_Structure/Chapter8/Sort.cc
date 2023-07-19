@@ -11,6 +11,15 @@ void Create_Sq(SqList &L) {
   }
 }
 
+void Create_Elem(ElemType *R) {
+  int n = rand() % MAXSIZE + 5;
+  for (int i = 0; i < n; ++i) {
+    R[i].key = rand() % 100;
+    cout << R[i].key << " ";
+  }
+  cout << endl;
+}
+
 void Show_Sq(SqList L) {
   int i;
   for (i = 1; i <= L.length; i++) {
@@ -174,7 +183,54 @@ void HeapSort(SqList &L) {
   }
 }
 
+//算法8.10 相邻两个有序子序列的归并
+void Merge(ElemType R[], ElemType T[], int low, int mid, int high) {
+  //将有序表R[low..mid]和R[mid+1..high]归并为有序表T[low..high]
+  int i = low, j = mid + 1, k = low;
+  while (i <= mid && j <= high) {
+    //将R中记录由小到大地并入T中
+    if (R[i].key <= R[j].key) {
+      T[k++] = R[i++];
+    } else {
+      T[k++] = R[j++];
+    }
+  }
+  while (i <= mid) {  //将剩余的R[low..mid]复制到T中
+    T[k++] = R[i++];
+  }
+  while (j <= high) {  //将剩余的R[j.high]复制到T中
+    T[k++] = R[j++];
+  }
+}
 
+void Show_Merged(ElemType *T, int low, int high) {
+  for (int i = low; i <= high; ++i) {
+    cout << T[i].key << " ";
+  }
+  cout << endl;
+}
+
+//算法8.11 归并排序
+void MSort(ElemType R[], ElemType T[], int low, int high) {
+  // R[low..high]归并排序后放入T[low..high]中
+  ElemType *S = new ElemType[MAXSIZE + 10];
+  if (low == high) {
+    T[low] = R[low];
+  } else {
+    int mid = (low + high) / 2;
+    //对子序列R[low..mid] 递归归并排序，结果放入S[low..mid]
+    MSort(R, S, low, mid);
+    //对子序列R[mid+1..high] 递归归并排序，结果放入S[mid+1..high]
+    MSort(R, S, mid + 1, high);
+    //将S[low..mid]和S [mid+1..high]归并到T[low..high]
+    Merge(S, T, low, mid, high);
+  }
+}
+
+void MergeSort(SqList &L){
+  //对顺序表L做归并排序
+  MSort(L.r, L.r, 1, L.length);
+}
 
 int main() {
   SqList L;
@@ -215,10 +271,23 @@ int main() {
   // cout << "After SelectSort: " << endl;
   // Show_Sq(L);
 
-  cout << "Before HeapSort: " << endl;
+  // cout << "Before HeapSort: " << endl;
+  // Show_Sq(L);
+  // HeapSort(L);
+  // cout << "After HeapSort: " << endl;
+  // Show_Sq(L);
+
+  // ElemType *R = new ElemType[MAXSIZE + 10];
+  // ElemType *T = new ElemType[MAXSIZE + 10];
+  // Create_Elem(R);
+  // int low = 0, mid = 2, high = 4;
+  // Merge(R, T, low, mid, high);
+  // Show_Merged(T, low, high);
+
+  cout << "Before MergeSort: " << endl;
   Show_Sq(L);
-  HeapSort(L);
-  cout << "After HeapSort: " << endl;
+  MergeSort(L);
+  cout << "After MergeSort: " << endl;
   Show_Sq(L);
 
   return 0;

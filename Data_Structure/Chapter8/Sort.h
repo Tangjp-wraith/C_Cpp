@@ -14,6 +14,7 @@ typedef struct {
 
 void Create_Sq(SqList &L);
 void Show_Sq(SqList L);
+void Create_Elem(ElemType *R);
 
 //算法8.1 直接插入排序
 void InsertSort(SqList &L);
@@ -42,3 +43,13 @@ void HeapAdjust(SqList &L, int s, int m);
 void CreatHeap(SqList &L);
 //算法8.9 堆排序
 void HeapSort(SqList &L);
+
+//算法8.10 相邻两个有序子序列的归并
+void Merge(ElemType R[], ElemType T[], int low, int mid, int high);
+void Show_Merged(ElemType *T, int low, int high);
+
+//算法8.11 归并排序
+void MSort(ElemType R[], ElemType T[], int low, int high);
+void MergeSort(SqList &L);
+
+//算法8.12 基数排序
