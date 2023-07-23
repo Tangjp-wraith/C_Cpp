@@ -23,3 +23,8 @@ add_executable(DuLinkList
   DuLinkList.h
   DuLinkList.cc
 )
+
+add_executable(Polynomial
+  Polynomial.h
+  Polynomial.cc
+)
