@@ -1,18 +1,41 @@
 #include "SqStack.h"
 
 //算法3.1　顺序栈的初始化
-Status InitStack(SqStack &S){
-  
+Status InitStack(SqStack &S) {
+  S.base = new SElemType[MAXSIZE];
+  if (!S.base) {
+    exit(OVERFLOW);
+  }
+  S.top = S.base;  // top初始为base，空栈
+  S.stacksize = MAXSIZE;
+  return OK;
 }
 
 //算法3.2　顺序栈的入栈
-Status Push(SqStack &S, SElemType e);
+Status Push(SqStack &S, SElemType e) {
+  if (S.top - S.base == S.stacksize) {
+    return ERROR;
+  }
+  *(S.top++) = e;  //元素e压入栈顶，栈顶指针加1
+  return OK;
+}
 
 //算法3.3　顺序栈的出栈
-Status Pop(SqStack &S, SElemType &e);
+Status Pop(SqStack &S, SElemType &e) {
+  if (S.base == S.top) {
+    return ERROR;
+  }
+  e = *(--S.top);  //栈顶指针减1，将栈顶元素赋给e
+  return OK;
+}
 
 //算法3.4　取顺序栈的栈顶元素
-char GetTop(SqStack S);
+char GetTop(SqStack S) {
+  if (S.top != S.base) {
+    return *(S.top - 1);  //返回栈顶元素的值，栈顶指针不变
+  }
+  return 0;
+}
 
 int main() {
   SqStack s;

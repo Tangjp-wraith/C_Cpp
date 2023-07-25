@@ -7,7 +7,7 @@ using namespace std;
 #define OVERFLOW -2
 #define MAXSIZE 100  //顺序栈存储空间的初始分配量
 typedef int Status;
-typedef char SElemType;
+typedef int SElemType;
 
 typedef struct {
   SElemType *base;  //栈底指针

@@ -7,22 +7,22 @@
 在ChapterX目录下执行
 
 ```bash
-cd build
+mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=DEBUG ..
 make -j$(nproc)  
 cd ..
-./build/<Executable File>   // CMakeLists.txt 下可查看可执行文件名称
+./build/<Executable File>   // CMakeLists.txt 下可查看可执行文件名称 或 build目录下
 ```
 
-也可使用Vscode CMake插件一键编译
+也可使用Vscode + CMake插件一键编译
 
-调试可以使用 Vscode + CodeLLDB 进行断点调试，自行配置launch.json
+调试可以使用 Vscode + CodeLLDB插件 进行断点调试，自行配置launch.json
 
 编译、调试、运行环境：g++/clang && CMake && CodeLLDB
 
 ## 第二章
 
-### 目录
+### 示例
 
 代码实现在SqList.h和SqLish.cc
 
