@@ -2,22 +2,25 @@
 
 考研复习，实现严蔚敏书本上所有的算法案例以及每章节后算法设计题
 
-编译、调试、运行环境：g++/clang && CMake && CodeLLDB 
+## 编译运行
 
-## 第二章
+在ChapterX目录下执行
 
-### 编译运行
-
-在Chapter2目录下执行
 ```bash
 cd build
 cmake -DCMAKE_BUILD_TYPE=DEBUG ..
-make -j$(nproc)    
+make -j$(nproc)  
 cd ..
 ./build/<Executable File>   // CMakeLists.txt 下可查看可执行文件名称
 ```
 
+也可使用Vscode CMake插件一键编译
+
 调试可以使用 Vscode + CodeLLDB 进行断点调试，自行配置launch.json
+
+编译、调试、运行环境：g++/clang && CMake && CodeLLDB
+
+## 第二章
 
 ### 目录
 
