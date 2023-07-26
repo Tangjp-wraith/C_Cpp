@@ -47,12 +47,12 @@ class vector {
     data_allocator::deallocate(start);
     end_of_storage = temp + (size() * 2);
     finish = temp + size();
-    delete start;
     start = temp;
   }
 
  public:
   /*---------迭代器相关函数---------*/
+
   iterator begin() const { return start; }
 
   iterator end() const { return finish; }
@@ -105,7 +105,7 @@ class vector {
       end_of_storage = start + vec.capacity();
       //再申请空间
       for (size_type i = 0; i < vec.size(); ++i) {
-        if (!type_bool<
+        if (type_bool<
                 typename type_traits<T>::has_trivial_copy_constructor>::value) {
           start[i] = *(vec.begin() + i);
         } else {
@@ -115,68 +115,197 @@ class vector {
     }
   }
 
-  vector(vector && vec){
-    
+  vector(vector&& vec) {
+    //先把之前的空间删掉
+    for (size_type i = 0; i < size(); ++i) {
+      if (!type_bool<
+              typename type_traits<T>::has_trivial_copy_constructor>::value) {
+        //如果需要就析构start + i上的对象
+        destroy(start + i);
+      }
+    }
+    //通过空间配置器回收空间
+    data_allocator::deallocate(start);
+    start = vec.start;
+    finish = vec.finish;
+    end_of_storage = vec.end_of_storage;
+    vec.start = nullptr;
+    vec.finish = nullptr;
+    vec.end_of_storage = nullptr;
   }
 
-  ~vector() { delete start; }
+  vector& operator=(const vector<T>& vec) {
+    for (size_type i = 0; i < size(); ++i) {
+      if (!type_bool<
+              typename type_traits<T>::has_trivial_copy_constructor>::value) {
+        destroy(start + i);
+      }
+    }
+    data_allocator::deallocate(start);
+    start = data_allocator::allocate(vec.capacity());
+    finish = start + vec.size();
+    end_of_storage = start + vec.capacity();
+    for (size_type i = 0; i < vec.size(); ++i) {
+      if (type_bool<
+              typename type_traits<T>::has_trivial_copy_constructor>::value) {
+        start[i] = *(vec.begin() + i);
+      } else {
+        construct(start + i, *(vec.begin() + i));
+      }
+    }
+  }
 
-  int size() const { return int(finish - start); }
+  vector& operator=(vector<T>&& vec) {
+    for (size_type i = 0; i < size(); ++i) {
+      if (!type_bool<
+              typename type_traits<T>::has_trivial_copy_constructor>::value) {
+        destroy(start + i);
+      }
+    }
+    data_allocator::deallocate(start);
+    start = vec.start;
+    finish = vec.finish;
+    end_of_storage = vec.end_of_storage;
+    vec.start = nullptr;
+    vec.finish = nullptr;
+    vec.end_of_storage = nullptr;
+  }
 
-  int capacity() const { return int(end_of_storage - start); }
+  ~vector() {
+    clear();
+    data_allocator::deallocate(start);
+  }
+
+  /*---------容器容量相关函数---------*/
+
+  size_type size() const { return size_type(finish - start); }
+
+  size_type capacity() const { return size_type(end_of_storage - start); }
 
   bool empty() const { return begin() == end(); }
 
-  T& front() { return *begin(); }
+  /*---------容器数据相关函数---------*/
 
-  T& back() { return *(end() - 1); }
+  reference front() { return *begin(); }
 
-  reference operator[](int n) { return *(begin() + n); }
+  reference back() { return *(end() - 1); }
 
-  void push_back(const T& x) {
+  reference operator[](size_type n) { return *(begin() + n); }
+
+  void push_back(const_reference x) {
     if (finish == end_of_storage) {
       allocate_and_copy(capacity() * 2);  //这里采用扩容系数为2
     }
-    *finish = x;  //在新的finish位置上插入元素
-    ++finish;     // finish自增，指针移动
+    if (type_bool<
+            typename type_traits<T>::has_trivial_copy_constructor>::value) {
+      *finish = x;  //在新的finish位置上插入元素
+    } else {
+      construct(finish, x);
+    }
+    ++finish;  // finish自增，指针移动
   }
 
-  void pop_back() { --finish; }
+  void push_back(value_type&& x) {
+    if (finish == end_of_storage) {
+      allocate_and_copy(capacity() * 2);  //这里采用扩容系数为2
+    }
+    if (type_bool<
+            typename type_traits<T>::has_trivial_copy_constructor>::value) {
+      *finish = x;  //在新的finish位置上插入元素
+    } else {
+      construct(finish, std::move(x));
+    }
+    ++finish;  // finish自增，指针移动
+  }
 
-  void erase(iterator position) {
-    for (iterator i = position; i != finish; ++i) {
-      *i = *(i + 1);
+  void pop_back() {
+    if (!type_bool<typename type_traits<T>::has_trivial_destructor>::value) {
+      destroy(finish);  //如果需要析构就必须析构
     }
     --finish;
   }
 
-  void erase(iterator first, iterator last) {
+  iterator erase(iterator position) {
+    for (iterator i = position; i != finish; ++i) {
+      if (type_bool<
+              typename type_traits<T>::has_trivial_copy_constructor>::value) {
+        *i = *(i + 1);
+      } else {
+        destroy(i);
+        construct(i, *(i + 1));
+      }
+    }
+    --finish;
+    return position;
+  }
+
+  iterator erase(iterator first, iterator last) {
     //将后面元素往前移动即可，把last到finish这一段，复制到a开始的空间这里
-    int diff = int(last - first);
-    int count = 0;
+    ptrdiff_t diff = last - first;
+    size_type count = 0;
     for (iterator i = last; i != finish; count++) {
-      *(first + count) = *(finish + count + diff);
+      if (type_bool<
+              typename type_traits<T>::has_trivial_copy_constructor>::value) {
+        *(first + count) = *(finish + count + diff);
+      } else {
+        destroy(first + count);
+        construct(first + count, *(first + count + diff));
+        destroy(first + count + diff);
+      }
+    }
+    if (!type_bool<typename type_traits<T>::has_trivial_destructor>::value) {
+      for (iterator i = first + count; i != last; ++i) {
+        //需要析构first + count到last这一段
+        destroy(i);
+      }
     }
     finish = finish - diff;
+    return first;
   }
 
   //调整vec的容量，如果调整后的容量大于调整前，则用数据x填充空余部分，
   //如果调整后容量小于调整前，则只保留前new_size位数据
-  void resize(int new_size, const T& x) {
+  void resize(size_type new_size, const_reference x) {
     if (new_size < size()) {
       erase(begin() + new_size, end());
     } else {
       if (new_size > capacity()) {
+        // 这里不考虑等于的情况，只考虑大于，因而在start + size到
+        // start + new_size这一段，插入常数x
         allocate_and_copy(capacity() * 2);
       }
       for (int i = 0; i < new_size - size(); ++i) {
-        *(finish + i) = x;
+        if (type_bool<
+                typename type_traits<T>::has_trivial_copy_constructor>::value) {
+          *(finish + i) = x;
+        } else {
+          construct(finish + i, x);
+        }
       }
       finish += new_size - size();
     }
   }
 
-  void resize(int new_size) { resize(new_size, 0.0); }
+  void resize(size_type new_size) {
+    if (new_size < size()) {
+      erase(begin() + new_size, end());
+    } else {
+      if (new_size > capacity()) {
+        // 这里不考虑等于的情况，只考虑大于，因而在start + size到
+        // start + new_size这一段，插入常数x
+        allocate_and_copy(capacity() * 2);
+      }
+      for (int i = 0; i < new_size - size(); ++i) {
+        if (type_bool<
+                typename type_traits<T>::has_trivial_copy_constructor>::value) {
+          *(finish + i) = 0;
+        } else {
+          construct(finish + i);
+        }
+      }
+      finish += new_size - size();
+    }
+  }
 
   void clear() { erase(begin(), end()); }
 };

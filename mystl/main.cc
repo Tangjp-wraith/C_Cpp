@@ -11,6 +11,6 @@ TEST(test1, test_vector) {
     vec.push_back(i);
     EXPECT_FLOAT_EQ(i, vec[i]);
   }
-  EXPECT_EQ(10, vec.size());
 
+  EXPECT_EQ(10, vec.size());
 }
