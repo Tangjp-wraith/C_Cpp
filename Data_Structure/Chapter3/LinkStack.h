@@ -9,6 +9,8 @@ typedef int Status;
 // typedef int SElemType; // 3.20
 typedef char SElemType;
 
+const char oper[7] = {'+', '-', '*', '/', '(', ')', '#'};
+
 typedef struct StackNode {
   SElemType data;
   struct StackNode *next;
@@ -33,3 +35,15 @@ void conversion(int N);
 
 //算法3.21　括号的匹配
 bool Matching();
+
+//判断ch是否为运算符
+bool In(char ch);
+
+//判断运算符优先级
+char Precede(char theta1, char theta2);
+
+//计算两数运算结果
+char Operate(char first, char theta, char second);
+
+//算法3.22　表达式求值
+char EvaluateExpression();

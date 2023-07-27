@@ -36,74 +36,130 @@ Status DeQueue(SqQueue &Q, QElemType &e) {
 }
 
 //算法3.15　取循环队列的队头元素
-SElemType GetHead(SqQueue Q) {
+QElemType GetHead(SqQueue Q) {
   if (Q.front != Q.rear) {
     return Q.base[Q.front];
   }
-  return 0;
+  return QElemType{};
 }
 
-int main() {
-  int choose, flag = 0;
-  SqQueue Q;
-  QElemType e, j;
-  cout << "1.初始化\n";
-  cout << "2.入队\n";
-  cout << "3.读队头元素\n";
-  cout << "4.出队\n";
-  cout << "0.退出\n\n";
+bool QueueEmpty(SqQueue &Q) {
+  if (Q.front == Q.rear) {
+    return true;
+  }
+  return false;
+}
 
-  choose = -1;
-  while (choose != 0) {
-    cout << "请选择:";
-    cin >> choose;
-    switch (choose) {
-      case 1:  //算法3.16　链队的初始化
-        if (InitQueue(Q)) {
-          flag = 1;
-          cout << "成功对队列进行初始化\n\n";
-        } else
-          cout << "初始化队列失败\n\n";
-        break;
-      case 2: {  //算法3.17　链队的入队
-        fstream file;
-        file.open("QNode.txt");
-        if (!file) {
-          cout << "错误！未找到文件！\n\n" << endl;
-          exit(ERROR);
-        }
-        if (flag) {
-          flag = 1;
-          cout << "入队的元素依次为：\n";
-          while (!file.eof()) {
-            file >> j;
-            if (file.fail())
-              break;
-            else {
-              EnQueue(Q, j);
-              cout << j << "  ";
-            }
-          }
-          cout << endl << endl;
-        } else
-          cout << "队列未建立，请重新选择\n\n";
-        file.close();
-      } break;
-      case 3:  //算法3.19　取链队的队头元素
-        if (flag != -1 && flag != 0)
-          cout << "队头元素为：\n" << GetHead(Q) << endl << endl;
-        else
-          cout << "队列中无元素，请重新选择\n" << endl;
-        break;
-      case 4:  //算法3.18　链队的出队
-        cout << "依次弹出的队头元素为:\n";
-        while (DeQueue(Q, e)) {
-          flag = -1;
-          cout << e << "  ";
-        }
-        cout << endl << endl;
-        break;
+// int main() {
+//   int choose, flag = 0;
+//   SqQueue Q;
+//   QElemType e, j;
+//   cout << "1.初始化\n";
+//   cout << "2.入队\n";
+//   cout << "3.读队头元素\n";
+//   cout << "4.出队\n";
+//   cout << "0.退出\n\n";
+
+//   choose = -1;
+//   while (choose != 0) {
+//     cout << "请选择:";
+//     cin >> choose;
+//     switch (choose) {
+//       case 1:  //算法3.16　链队的初始化
+//         if (InitQueue(Q)) {
+//           flag = 1;
+//           cout << "成功对队列进行初始化\n\n";
+//         } else
+//           cout << "初始化队列失败\n\n";
+//         break;
+//       case 2: {  //算法3.17　链队的入队
+//         fstream file;
+//         file.open("QNode.txt");
+//         if (!file) {
+//           cout << "错误！未找到文件！\n\n" << endl;
+//           exit(ERROR);
+//         }
+//         if (flag) {
+//           flag = 1;
+//           cout << "入队的元素依次为：\n";
+//           while (!file.eof()) {
+//             file >> j;
+//             if (file.fail())
+//               break;
+//             else {
+//               EnQueue(Q, j);
+//               cout << j << "  ";
+//             }
+//           }
+//           cout << endl << endl;
+//         } else
+//           cout << "队列未建立，请重新选择\n\n";
+//         file.close();
+//       } break;
+//       case 3:  //算法3.19　取链队的队头元素
+//         if (flag != -1 && flag != 0)
+//           cout << "队头元素为：\n" << GetHead(Q) << endl << endl;
+//         else
+//           cout << "队列中无元素，请重新选择\n" << endl;
+//         break;
+//       case 4:  //算法3.18　链队的出队
+//         cout << "依次弹出的队头元素为:\n";
+//         while (DeQueue(Q, e)) {
+//           flag = -1;
+//           cout << e << "  ";
+//         }
+//         cout << endl << endl;
+//         break;
+//     }
+//   }
+//   return 0;
+// }
+
+//算法3.23　舞伴问题
+SqQueue Mdancers, Fdancers;
+void DancePartner(Person dancer[], int num) {
+  InitQueue(Mdancers);
+  InitQueue(Fdancers);
+  Person p;
+  for (int i = 0; i < num; ++i) {
+    p = dancer[i];
+    if (p.sex == 'F') {
+      EnQueue(Fdancers, p);
+    } else {
+      EnQueue(Mdancers, p);
     }
   }
+  cout << "The dancing partners are:" << endl;
+  while (!QueueEmpty(Fdancers) && !QueueEmpty(Mdancers)) {
+    DeQueue(Fdancers, p);
+    cout << p.name << " ";
+    DeQueue(Mdancers, p);
+    cout << p.name << endl;
+  }
+  if (!QueueEmpty(Fdancers)) {
+    p = GetHead(Fdancers);  
+    cout << "The first man to get a partner is: " << endl;
+    cout << p.name << endl;
+  } else if (!QueueEmpty(Mdancers)) { 
+    p = GetHead(Mdancers);        
+    cout << "The first woman to get a partner is: " << p.name << endl;
+  }
+}
+
+Person dancer[MAXQSIZE];
+
+int main() {
+  int i = 0;
+  fstream file;
+  file.open("DancePartner.txt");
+  if (!file) {
+    cout << "错误！未找到文件！\n\n" << endl;
+    exit(ERROR);
+  }
+  while (!file.eof()) {
+    file >> dancer[i].name >> dancer[i].sex;
+    i++;
+  }
+  DancePartner(dancer, i + 1);
   return 0;
 }

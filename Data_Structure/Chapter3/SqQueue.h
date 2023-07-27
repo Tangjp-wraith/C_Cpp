@@ -6,8 +6,14 @@ using namespace std;
 #define OK 1
 #define ERROR 0
 #define OVERFLOW -2
-typedef int QElemType;
-typedef int SElemType;
+
+typedef struct {
+  char name[20];
+  char sex;
+} Person;
+
+// typedef int QElemType;
+typedef Person QElemType;  // 算法3.23　舞伴问题
 typedef int Status;
 
 typedef struct {
@@ -29,4 +35,9 @@ Status EnQueue(SqQueue &Q, QElemType e);
 Status DeQueue(SqQueue &Q, QElemType &e);
 
 //算法3.15　取循环队列的队头元素
-SElemType GetHead(SqQueue Q);
+QElemType GetHead(SqQueue Q);
+
+bool QueueEmpty(SqQueue &Q);
+
+//算法3.23　舞伴问题
+void DancePartner(Person dance[], int num);
