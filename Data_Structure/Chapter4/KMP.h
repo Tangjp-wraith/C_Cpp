@@ -30,5 +30,5 @@ typedef struct {
   int len;
 } HString;
 
-//算法4.5　计算next函数修正值
+//算法4.5 病毒感染检测（BF）
 void Virus_detection();
