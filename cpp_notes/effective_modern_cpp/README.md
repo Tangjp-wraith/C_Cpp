@@ -8,7 +8,7 @@ Book目录下有本书的中文翻译版
 
 ## Deducing Types（ 类型推导）
 
-### base1 ：顶层const与底层const
+### base1：顶层const与底层const
 
 > **《C++ Primer》P58：当执行对象拷贝操作时，常量的顶层const不受什么影响，而底层const必须一致**
 
@@ -61,7 +61,7 @@ int x = get_x();
 
 - 左值：指向特定内存的具名对象
 
-- 右值：临时对象，字符串除外的字面量
+- 右值：临时对象，字符串除外的字面量（见base3）
 
 判断一个表达式是左值还是右值：是否可以取地址
 
@@ -87,7 +87,7 @@ int fun(int &a) {
 ```cpp
 int &func(int &a) {
   a = a + 1;
-	return a;
+  return a;
 }
 ```
 
@@ -182,3 +182,96 @@ BigMemoryPool kkk = make_pool();
 如果类中没有实现移动构造，就会执行三次拷贝
 
 注：上述代码运行时，需要在CMakeLists.txt中加入`set(CMAKE_CXX_FLAGS -fno-elide-constructors) #禁止返回值优化` ，否则，执行代码时，不管写不写移动构造，都只会发生一次拷贝，编译器会帮我们做返回值优化
+
+### base3：数组指针与函数指针
+
+**1、数组相关的数据类型**（太复杂了，c++不建议使用[]）
+
+`int array[5] ={0,1,2,3,4};` array的数据类型是int [5]，不是int *
+
+```cpp
+int a = 10;
+int array[5] = {0, 1, 2, 3, 4};
+int *ptr = array;  // 将数组名直接赋值给一个指针会发生【退化】
+// int(*ptr2)[5] = array;
+int *ptr3[5] = {&a, &a, &a, &a, &a}; // 数组指针（是指针）
+// int (*) [5]  指针数组（是数组） 对数组名取地址那么就没有退化这一说
+int(*ptr4)[5] = &array;
+int(&ref)[5] = array;  // int (&) [5] 数组引用
+```
+
+数组名取地址的类型（int 数组指针）**不等于** 数组名的类型（int 指针）
+
+ptr4和ref要加括号的原因是[]的优先级高于*，不加括号就是ptr3那行代码，意思是ptr3是个数组，数组中每个元素的类型是int *，详见《C++ Primer》P147
+
+`"hello world";` 字符串字面量是左值，原因是编译器在第一次创建这个字面量时会把它存放在一个位置，这样之后的每次拷贝就不需要一个个字符重复创建临时对象了，不然字符串很长的话就显得很蠢！
+
+```cpp
+  // &"hello world";  // "hello world"类型是const char[12]
+  char str[12] = "hello world";
+  const char *strr = "hello world";  // 取地址后变成底层const因此前面需要加const
+  // 但是不加const也不会报错，但是我们依旧不能修改strrrr的值
+  // char *strrr = "hello world"; 
+  // strrr[1] = 's'; // 运行时会出现段错误
+```
+
+**2、数组名作为参数传递时会发生退化**
+
+下面前三个函数是等价的，传入的参数都是`int *`，与第四个函数不等价，参数类型是`int (*)[5]`
+
+```cpp
+void func1(int a[]);
+void func2(int *a);
+void func3(int a[5]);
+void func4(int (*a)[5]);
+```
+
+**3、函数相关的数据类型**
+
+```cpp
+bool fun(int a, int b) {
+  std::cout << "fun" << std::endl;
+  return true;
+};                             // => bool (int,int); 函数数据类型
+bool (*funptr)(int a, int b);  // => bool (*)(int,int); 函数指针数据类型
+// 函数指针赋值 bool (*)(int,int); &可以省略
+bool (*funptr1)(int, int) = &fun;  // = fun 函数退化成函数指针
+// 函数指针使用 *可以省略
+bool c = (*funptr1)(1, 2);  // 输出fun
+// 函数指针作为形参 *可以省略
+void fun2(int c, bool (*funptr)(int, int));
+// 函数指针作为返回值 *不可以省略
+bool (*fun3(int c))(int, int);
+// 函数的引用
+bool (&funref)(int, int) = fun;
+
+// main函数内
+bool (*funptr)(int, int) = fun;  // 函数退化成函数指针
+//funptr = fun;
+//funptr = &fun;
+bool xx =funptr(1,2); // 输出fun
+bool yy = (*funptr)(1, 2); //输出fun
+bool (&funRef)(int, int) = fun;
+bool zz = funRef(1,2); //输出fun
+```
+
+**4、类型别名（typedef/using）**
+
+c++推荐使用using，便于理解
+
+```cpp
+typedef int int_name;
+int_name xxx = 10;
+using int_name = int;
+
+// typedef bool (*fun3Ptr)(int, int); // fun3Ptr ==  bool (*)(int, int)
+// typedef bool fun(int, int);        // fun ==  bool (int, int)
+using fun3Ptr = bool (*)(int, int);
+using fun3xxx = bool(int, int);
+// fun3xxx == fun3Ptr* 
+fun3Ptr fun6(int c);           // == bool (*fun3(int c))(int, int);
+void fun7(int c, fun3Ptr f);   // == void fun2(int c, bool (*funptr)(int, int));
+void fun77(int c, fun3xxx f);  // == void fun77(int c, bool fun(int, int));
+void fun777(int c,fun3xxx *f); // == fun7
+```
+

@@ -56,13 +56,12 @@ int main() {
 
   // 拷贝操作，getPool()进行两次copy，
   // 注意：需要在没有移动构造的前提下，有移动构造时会进行两次移动构造
-  // BigMemoryPool aaa = getPool();
-  // BigMemoryPool bbb = aaa;   //拷贝操作
-  // BigMemoryPool &ccc = bbb;  // 引用操作
-  // //
+  BigMemoryPool aaa = getPool();
+  BigMemoryPool bbb = aaa;   //拷贝操作
+  BigMemoryPool &ccc = bbb;  // 引用操作
   // 右值绑定到右值引用上连移动构造都不会发生，eee只是aaa的一个别名，操作aaa，eee，ccc是一样的
-  // BigMemoryPool &&eee = std::move(aaa);
-  // BigMemoryPool ddd = std::move(aaa);  // 移动操作，此时aaa已经销毁了
+  BigMemoryPool &&eee = std::move(aaa);
+  BigMemoryPool ddd = std::move(aaa);  // 移动操作，此时aaa已经销毁了
 
   BigMemoryPool kkk = make_pool();
   // BigMemoryPool kkk = temp2; 这里发生第二次移动，将temp2赋给kkk
