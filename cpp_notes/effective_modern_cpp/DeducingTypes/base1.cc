@@ -8,7 +8,7 @@ int main() {
   // int *const p2 = p;  // error 错误同上
   const int *p3 = p;  // 顶层const可以忽略，但底层必须一致加上了第一个const
   // int *p4 = &a;  // error a虽然是顶层const，&a变成了底层const 注意！！！
-  // const int *p4 = &a;
+  const int *p4 = &a;
   const int &r1 = a;  //常量引用如果在左侧，右侧可以接任何东西
   const int &rr1 = b;  //常量引用如果在左侧，右侧可以接任何东西
   const int &rr2 = 40;  //常量引用如果在左侧，右侧可以接任何东西
