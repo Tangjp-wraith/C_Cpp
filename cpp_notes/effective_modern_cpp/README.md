@@ -1,6 +1,6 @@
 # Effective Modern C++
 
-阅读《Effective Modern C++》过程中的写下的一些笔记
+阅读《Effective Modern C++》过程中的写下的一些笔记，笔记并未按照书本顺序
 
 其中base是阅读item前的一些补充，item为本书提出的一些条款
 
@@ -274,4 +274,67 @@ void fun7(int c, fun3Ptr f);   // == void fun2(int c, bool (*funptr)(int, int));
 void fun77(int c, fun3xxx f);  // == void fun77(int c, bool fun(int, int));
 void fun777(int c,fun3xxx *f); // == fun7
 ```
+
+### item1：理解模板类型推导
+
+对于下面两种写法，是一样的，T都是用来修饰param的，这个const都作为顶层const
+
+```cpp
+template <typename T>
+void f(const T param);
+void f(T const param);
+```
+
+下面两个fun函数不构成重载，原因是顶层const不构成重载
+
+```cpp
+void fun(int a) {}
+void fun(const int a) {} 
+```
+
+指针的引用：
+
+```cpp
+int *a = &b;
+int *&c = a;
+```
+
+函数指针与函数引用：
+
+- 函数指针的底层const似乎只能由类型别名表示出来
+
+- 函数引用的底层const会被编译器自动忽略
+
+```cpp
+int fun2(int) { return 10; }
+int (*fun2ptr)(int) = fun2;
+int (*const fun2ptr1)(int) = fun2;  // 顶层const
+// const int (*fun2ptr2)(int) = fun2;  底层const报错
+int (&fun2ref)(int) = fun2;
+using F = int(int);
+const F *aaa = fun2;
+F *const bbb = fun2;
+const F &ccc = fun2;
+```
+
+---
+
+```cpp
+template <typename T> // 写法固定
+void f(ParamType param); 
+
+f(expr); // 调用
+```
+
+`ParamType: T;T*;T&;T&&;const T;const T*;const T&;const T&&;T* const;const T* const;`
+
+`expr:上面的T全换成int;字面量;int[10];int(*)[10];int(&)[10];bool(int,int);bool(*)(int,int);bool(&)(int,int);` 
+
+1、理解顶层与底层const，缺啥补啥 `T;T*;T&;const T;const T*;const T&;T* const;const T* const;上面的T全换成int;字面量;`由于顶层const不构成重载，于是`const T = T`，`T* const = T*`，`const T* const = const T*`
+
+2、理解数组与函数能够退化成指针即可 `int[10];int(*)[10];int(&)[10];bool(int,int);bool(*)(int,int);bool(&)(int,int);`
+
+3、通用引用（万能引用）：传入左值   ParamType为左值引用；传入右值，ParamType为右值引用   `T&&;const T&&;`  注意引用折叠，当int & 和 && 可折叠为int & ，万能引用只能写作 T&& ，const T&&只是右值引用
+
+**具体的代码示例见item1.cc**
 
