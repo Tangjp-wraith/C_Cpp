@@ -4,8 +4,6 @@
 
 其中base是阅读item前的一些补充，item为本书提出的一些条款
 
-Book目录下有本书的中文翻译版
-
 ## Deducing Types（ 类型推导）
 
 ### base1：顶层const与底层const
@@ -337,4 +335,75 @@ f(expr); // 调用
 3、通用引用（万能引用）：传入左值   ParamType为左值引用；传入右值，ParamType为右值引用   `T&&;const T&&;`  注意引用折叠，当int & 和 && 可折叠为int & ，万能引用只能写作 T&& ，const T&&只是右值引用
 
 **具体的代码示例见item1.cc**
+
+### item7：区别使用()和{}创建对象
+
+**1、{}的引入**
+
+```cpp
+struct A {
+  A(int a) { std::cout << "A(int a)" << std::endl; }
+  A(const A &a) { std::cout << "A(const A& a)" << std::endl; }
+};  
+// main函数内
+A a = 10; // 一次构造一次拷贝
+A b(10); // 一次构造
+A c = (10);  // 一次构造一次拷贝
+A d{10};  // 一次构造
+A e = {10};  // 一次构造
+// d和e是c++11之后提出的 d和e在c++14前等价，14及之后不等价
+```
+
+1、`A a = 10;`问题：只能接收一个参数；要额外执行一次拷贝，有些类还不可拷贝
+
+2、`A a(10);` 问题：被用做函数参数或返回值时还是会执行拷贝
+
+3、`A a{10};`的优势：{}可以完美解决上面问题，并且不允许缩窄转换；大大简化了聚合类的初始化；{}对c++最令人头疼的解析问题天生免疫（类内初始化不可以使用2、）
+
+```cpp
+struct people {
+//  private: // private就不是聚合类了，{}初始化报错
+  // people() = default;
+  int age;
+  std::string name;
+  float height;
+};
+struct A {
+  A(int a) { std::cout << "A(int a)" << std::endl; }
+  A(int a, int b) { std::cout << "A(int a,int b)" << std::endl; }
+  A(const A &a) { std::cout << "A(const A& a)" << std::endl; }
+};
+// main函数内
+// A f = 10, 5; // 只能接收一个参数，错误
+A g(10, 5);     //一次构造
+A gg(10, 5.);   // 不安全
+A i = {10, 5};  // 一次构造
+// A j = {10,5.}; // 报错，不允许缩窄转换
+A j = {10, static_cast<int>(5.)};
+fun1(A(10, 5));  // 一次构造一次拷贝
+fun1({10, 5});   // 一次构造
+A k = fun2();    // 一次构造两次拷贝
+A m = fun3();  //一次构造一次拷贝 最后赋值给m时会拷贝一次，可以用移动构造
+people aa{19, "cxk", 191.};  // 聚合类的初始化 
+```
+
+**3、聚合类的定义与不同标准的区别**
+
+C++ 11 ：
+
+- 所有成员都是public
+- 没有定义任何构造函数 但可以写出=default
+- 没有类内初始化 （C++17取消）存在问题：初始化的任务交给了用户
+- 没有基类，也没有virtual函数
+
+```cpp
+struct people{
+  // people() = default;
+  int age;
+  std::string name;
+  float height;
+};
+```
+
+C++17：可以有基类，但必须是公有继承且必须是非虚继承（基类可以不是聚合类）
 
