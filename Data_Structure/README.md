@@ -2,17 +2,17 @@
 
 ## Build
 
-在ChapterX目录下执行
+在主目录下执行
 
 ```bash
 mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=DEBUG ..
 make -j$(nproc)  
-cd ..
-./build/<Executable File>   // CMakeLists.txt 下可查看可执行文件名称 或 build目录下
+cd ../ChapterX
+./bin/<Executable File>   // CMakeLists.txt 下可查看可执行文件名称 或 bin目录下
 ```
 
-也可使用Vscode + CMake插件一键编译
+也可使用Vscode + CMake插件一键编译，运行（运行需要将有些涉及到文件输入的文件放入bin文件夹内）
 
 调试可以使用 Vscode + CodeLLDB插件 进行断点调试，自行配置launch.json
 

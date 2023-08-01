@@ -157,7 +157,7 @@ int main() {
   StrAssign(S, (char *)"bbaaabbaba");
   SString T;
   StrAssign(T, (char *)"abb");
-  // cout << "主串和子串在第" << Index(S, T, 1) << "个字符处首次匹配\n";
+  cout << "主串和子串在第" << Index(S, T, 1) << "个字符处首次匹配\n";
   int *p = new int[T[0] + 1];
   // get_next(T, p);
   get_nextval(T, p);

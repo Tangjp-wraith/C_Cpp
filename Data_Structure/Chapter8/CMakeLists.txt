@@ -1,5 +1,5 @@
-project(Chapter4)
+project(Chapter8)
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/)
 
-add_executable(KMP KMP.h KMP.cc)
+add_executable(Sort Sort.h Sort.cc)
