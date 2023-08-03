@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <queue>
 
 using namespace std;
 
@@ -22,7 +23,25 @@ int LocateVex(AMGraph G, VerTexType v);
 int CreateUDN(AMGraph &G);
 void show(AMGraph G);
 
-//算法6.3　深度优先搜索遍历连通图的递归算法
-int FistAdjVex(AMGraph G,int v);
-int NextAdjVex(AMGraph G, int v,int w);
-void DFS(AMGraph G,int v);
+//算法6.3/6.5 深度优先搜索遍历连通图的递归算法
+int FistAdjVex(AMGraph G, int v);
+int NextAdjVex(AMGraph G, int v, int w);
+void DFS(AMGraph G, int v);
+
+//算法6.4　深度优先搜索遍历非连通图
+void DFSTraverse(AMGraph G);
+
+//算法6.7　广度优先搜索遍历连通图
+void BFS(AMGraph G, int v);
+
+//算法6.8　普里姆算法
+int Min(AMGraph G);
+void MiniSpanTree_Prim(AMGraph G,VerTexType u);
+
+//算法6.9　克鲁斯卡尔算法
+void MiniSpanTree_Kruskal(AMGraph G);
+
+//算法6.10　迪杰斯特拉算法
+int CreateDN(AMGraph &G);
+void ShortestPath_DIJ(AMGraph G, int v0);
+void DisplayPath(AMGraph G, int begin, int temp);

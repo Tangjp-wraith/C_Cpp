@@ -59,8 +59,43 @@ void show(ALGraph G) {
   }
 }
 
+//算法6.6　采用邻接表表示图的深度优先搜索遍历
+bool visited[MVNUM];
+void DFS(ALGraph G, int v) {
+  cout << G.vertices[v].data << " ";
+  visited[v] = true;
+  ArcNode *pos = G.vertices[v].firstarc;
+  while (pos) {
+    int w = pos->adjvex;
+    if (!visited[w]) {
+      DFS(G, w);
+    }
+    pos = pos->nextarc;
+  }
+}
+
 int main() {
   ALGraph G;
   CreateUDN(G);
   show(G);
+  
+  cout << "请输入遍历连通图的起始点：";
+  VerTexType c;
+  cin >> c;
+  int i;
+  for (i = 0; i < G.vexnum; ++i) {
+    if (c == G.vertices[i].data) break;
+  }
+  while (i >= G.vexnum) {
+    cout << "该点不存在,请重新输入!" << endl;
+    cout << "请输入遍历连通图的起始点:";
+    cin >> c;
+    for (i = 0; i < G.vexnum; ++i) {
+      if (c == G.vertices[i].data) break;
+    }
+  }
+  cout << "深度优先搜索遍历图结果:" << endl;
+  DFS(G, i);
+  cout << endl;
+  return 0;
 }

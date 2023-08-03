@@ -30,3 +30,6 @@ typedef struct {
 int LocateVex(ALGraph G, VerTexType v);
 int CreateUDN(ALGraph &G);
 void show(ALGraph G);
+
+//算法6.6　采用邻接表表示图的深度优先搜索遍历
+void DFS(ALGraph G, int v);
