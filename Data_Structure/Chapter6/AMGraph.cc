@@ -243,8 +243,8 @@ void MiniSpanTree_Kruskal(AMGraph G) {
 
 //算法6.10　迪杰斯特拉算法
 
-int *Dij = new int[MVNUM];     //用于记录最短路的长度
-bool *S = new bool[MVNUM];   //标记顶点是否进入S集合
+int *Dij = new int[MVNUM];       //用于记录最短路的长度
+bool *S = new bool[MVNUM];       //标记顶点是否进入S集合
 int *Path_DIJ = new int[MVNUM];  //用于记录最短路顶点的前驱
 
 // 创建有向图
@@ -259,7 +259,10 @@ int CreateDN(AMGraph &G) {
   }
   for (int i = 0; i < G.vexnum; ++i) {
     for (int j = 0; j < G.vexnum; ++j) {
-      G.arcs[i][j] = MAXINT;
+      if (j != i)
+        G.arcs[i][j] = MAXINT;
+      else
+        G.arcs[i][j] = 0;
     }
   }
   cout << "输入边依附的顶点及权值,如 a b 5" << endl;
@@ -289,7 +292,7 @@ void ShortestPath_DIJ(AMGraph G, int v0) {
     }
   }
   S[v0] = true;  //将v0加入S
-  Dij[v0] = 0;     //源点到源点的距离为0
+  Dij[v0] = 0;   //源点到源点的距离为0
   /*―初始化结束，开始主循环，每次求得v0到某个顶点v的最短路径，将v加到S集―*/
   for (int i = 1; i < n; ++i) {  //对其余n-1个顶点，依次进行计算
     minx = MAXINT;
@@ -317,7 +320,41 @@ void DisplayPath_DIJ(AMGraph G, int begin, int temp) {
   }
 }
 
+//算法6.11　弗洛伊德算法
+int Path[MVNUM][MVNUM];  //最短路径上顶点vj的前一顶点的序号
+int D[MVNUM][MVNUM];     //记录顶点vi和vj之间的最短路径长度
 
+void ShortestPath_Floyed(AMGraph G) {
+  //用Floyd算法求有向网G中各对顶点i和j之间的最短路径
+  int n = G.vexnum;
+  for (int i = 0; i < n; ++i) {
+    for (int j = 0; j < n; ++j) {
+      D[i][j] = G.arcs[i][j];
+      if (D[i][j] < MAXINT && i != j) {
+        Path[i][j] = i;
+      } else {
+        Path[i][j] = -1;
+      }
+    }
+  }
+  for (int k = 0; k < n; ++k) {
+    for (int i = 0; i < n; ++i) {
+      for (int j = 0; j < n; ++j) {
+        if (D[i][k] + D[k][j] < D[i][j]) {
+          D[i][j] = D[i][k] + D[k][j];
+          Path[i][j] = Path[k][j];
+        }
+      }
+    }
+  }
+}
+
+void DisplayPath_Floyed(AMGraph G, int begin, int temp){
+  if (Path[begin][temp] != -1) {
+    DisplayPath_Floyed(G, begin, Path[begin][temp]);
+    cout << G.vexs[Path[begin][temp]] << "-->";
+  }
+}
 
 int main() {
   AMGraph G;
@@ -360,10 +397,12 @@ int main() {
   cin >> start >> destination;
   num_start = LocateVex(G, start);
   num_destination = LocateVex(G, destination);
-  ShortestPath_DIJ(G, num_start);
+  // ShortestPath_DIJ(G, num_start);
+  ShortestPath_Floyed(G);
   cout << endl << "最短路径为:";
-  DisplayPath_DIJ(G, num_start, num_destination);
+  // DisplayPath_DIJ(G, num_start, num_destination);
+  DisplayPath_Floyed(G, num_start, num_destination);
   cout << G.vexs[num_destination] << endl;
-
+  cout << "最短路径的长度为:" << D[num_start][num_destination] << endl;
   return 0;
 }

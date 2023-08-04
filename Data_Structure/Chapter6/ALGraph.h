@@ -33,3 +33,5 @@ void show(ALGraph G);
 
 //算法6.6　采用邻接表表示图的深度优先搜索遍历
 void DFS(ALGraph G, int v);
+
+//算法6.12　拓扑排序

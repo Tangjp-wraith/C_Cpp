@@ -36,7 +36,7 @@ void BFS(AMGraph G, int v);
 
 //算法6.8　普里姆算法
 int Min(AMGraph G);
-void MiniSpanTree_Prim(AMGraph G,VerTexType u);
+void MiniSpanTree_Prim(AMGraph G, VerTexType u);
 
 //算法6.9　克鲁斯卡尔算法
 void MiniSpanTree_Kruskal(AMGraph G);
@@ -44,4 +44,8 @@ void MiniSpanTree_Kruskal(AMGraph G);
 //算法6.10　迪杰斯特拉算法
 int CreateDN(AMGraph &G);
 void ShortestPath_DIJ(AMGraph G, int v0);
-void DisplayPath(AMGraph G, int begin, int temp);
+void DisplayPath_DIJ(AMGraph G, int begin, int temp);
+
+//算法6.11　弗洛伊德算法
+void ShortestPath_Floyed(AMGraph G);
+void DisplayPath_Floyed(AMGraph G, int begin, int temp);
