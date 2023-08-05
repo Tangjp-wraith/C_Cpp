@@ -18,7 +18,7 @@ cd ../ChapterX
 
 编译、调试、运行环境：g++/clang && CMake && CodeLLDB
 
-## Chapter2
+### Chapter2
 
 代码实现在SqList.h和SqLish.cc
 
@@ -57,7 +57,7 @@ cd ../ChapterX
 1. 算法2.18 多项式的创建
 2. 算法2.19 多项式的相加
 
-## Chapter3
+### Chapter3
 
 代码实现在SqStack.h和SqStack.cc
 
@@ -97,7 +97,7 @@ cd ../ChapterX
 3. 算法3.18　链队的出队
 4. 算法3.19　取链队的队头元素
 
-## Chapter4
+### Chapter4
 
 代码实现在KMP.h 和 KMP.cc
 
@@ -107,7 +107,7 @@ cd ../ChapterX
 4. 算法4.4　计算next函数修正值
 5. 算法4.5 病毒感染检测（BF）
 
-## Chapte5
+### Chapte5
 
 代码实现在BiTree.h 和 BiTree.cc
 
@@ -132,7 +132,27 @@ cd ../ChapterX
 1. 算法5.10 构造哈夫曼树
 2. 算法5.11 根据赫夫曼树求赫夫曼编码
 
-## Chapter8
+### Chapter6
+
+代码实现在AMGraph.h 和 AMGraph.cc
+
+1. 算法6.1　采用邻接矩阵表示法创建无向网
+2. 算法6.3/6.5 深度优先搜索遍历连通图的递归算法
+3. 算法6.4　深度优先搜索遍历非连通图
+4. 算法6.7　广度优先搜索遍历连通图
+5. 算法6.8　普里姆算法
+6. 算法6.9　克鲁斯卡尔算法
+7. 算法6.10　迪杰斯特拉算法
+8. 算法6.11　弗洛伊德算法
+
+代码实现在ALGraph.h 和 ALGraph.cc
+
+1. 算法6.2　采用邻接表表示法创建无向图
+2. 算法6.6　采用邻接表表示图的深度优先搜索遍历
+3. 算法6.12　拓扑排序
+4. 算法6.13　关键路径算法
+
+### Chapter8
 
 代码实现在Sort.h和Sort.cc中
 
