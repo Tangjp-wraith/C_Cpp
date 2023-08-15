@@ -10,4 +10,6 @@ add_subdirectory(Chapter5)
 add_subdirectory(Chapter6)
 add_subdirectory(Chapter7)
 add_subdirectory(Chapter8)
+add_subdirectory(Homework/Chapter2)
+
 

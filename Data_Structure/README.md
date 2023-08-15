@@ -22,8 +22,8 @@ cd ../ChapterX
 
 ## 课本示例代码
 
-完成教材中的示例代码，[目录]()
+完成教材中的示例代码，[目录](https://github.com/Tangjp-wraith/C_Cpp/blob/master/Data_Structure/Sample_dir.md)
 
 ## 课后算法设计题
 
-完成教材中每单元课后算法设计题，[目录]()
+完成教材中每单元课后算法设计题，[目录](https://github.com/Tangjp-wraith/C_Cpp/blob/master/Data_Structure/Homework.md)
