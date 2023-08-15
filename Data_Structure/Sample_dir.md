@@ -1,4 +1,8 @@
 
+## 数据结构（C语言版 第2版）严蔚敏 课本示例代码
+
+代码在SampleCode目录对应文件下
+
 ### Chapter2
 
 代码实现在SqList.h和SqLish.cc
