@@ -13,18 +13,10 @@ void Merge(LinkList &a, LinkList &b) {
   LinkList pc = a;
   while (pa && pb) {
     if (pa->data <= pb->data) {
-      if(pc->data == pa->data) {
-        pa = pa->next;
-        continue;
-      }
       pc->next = pa;
       pc = pa;
       pa = pa->next;
     } else {
-      if (pc->data == pb->data) {
-        pb = pb->next;
-        continue;
-      }
       pc->next = pb;
       pc = pb;
       pb = pb->next;
@@ -39,7 +31,7 @@ int main() {
   a->next = NULL;
   LinkList b = new LNode;
   b->next = NULL;
-  LinkList p , pa = a ,pb = b;
+  LinkList p, pa = a, pb = b;
   for (int i = 1; i < 20; i += 2) {
     p = new LNode;
     p->data = i;
