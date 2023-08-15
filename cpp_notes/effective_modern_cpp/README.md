@@ -500,3 +500,8 @@ A aaaaaaa{{}};
 A bbbbbbb({});
 ```
 
+### item2：理解auto类型推导
+
+1、万能引用的第二种写法 `auto &&`
+
+2、
