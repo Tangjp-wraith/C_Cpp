@@ -11,7 +11,7 @@ struct Student {
 };
 
 void test_any() {
-  any t = "你好";
+  any t = "hello";
   auto test_construct = [&]() {
     std::cout << t.type().name() << "\n";
 
