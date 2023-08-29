@@ -1,16 +1,16 @@
 cmake_minimum_required(VERSION 3.17)
 
-project(mystl
+project(ministl
   LANGUAGES C CXX
 )
 
 set(CMAKE_CXX_STANDARD 14)
-set(MYSTL_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
+set(MINISTL_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 
 find_package(GTest REQUIRED)
 
 add_executable(test
-  ${MYSTL_INCLUDE_DIR}
+  ${MINISTL_INCLUDE_DIR}
   test.cc
 )
 

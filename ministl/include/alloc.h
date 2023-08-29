@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <iostream>
 
-namespace mystl {
+namespace ministl {
 
 // 定义符合STL规格的配置器接口,
 // 不管是一级配置器还是二级配置器都是使用这个接口进行分配的
@@ -272,4 +272,4 @@ char* __default_alloc_template<threads, inst>::chunk_alloc(size_t size,
 // 默认用第二级空间配置器
 typedef __default_alloc_template<false, 0> alloc;
 
-}  // namespace mystl
+}  // namespace ministl

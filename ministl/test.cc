@@ -1,11 +1,12 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+#include "include/alloc.h"
 #include "include/allocator.h"
 
-using namespace mystl;
+using namespace ministl;
 
-TEST(test1, alloc_test) {
+TEST(test1, allocator_test) {
   allocator<std::string> alloc;
   auto str_ve = alloc.allocate(4);
   auto p = str_ve;

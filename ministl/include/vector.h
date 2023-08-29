@@ -4,7 +4,7 @@
 
 #include <cstddef>
 
-namespace mystl {
+namespace ministl {
   
   
-}  // namespace mystl
+}  // namespace ministl

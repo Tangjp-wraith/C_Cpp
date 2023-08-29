@@ -6,7 +6,7 @@
 #include <iostream>
 #include <new>
 
-namespace mystl {
+namespace ministl {
 
 template <class T>
 inline T* _allocate(ptrdiff_t size, T*) {
@@ -62,4 +62,4 @@ class allocator {
   size_type max_size() const { return size_type(UINT_MAX / sizeof(T)); }
 };
 
-}  // namespace mystl
+}  // namespace ministl
